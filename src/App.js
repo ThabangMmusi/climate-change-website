@@ -7,6 +7,7 @@ import InteractivesPage from './pages/InteractivesPage';
 import ChallengePage from './pages/ChallengePage';
 import AboutPage from './pages/AboutPage';
 import MyProgressPage from './pages/MyProgressPage';
+import NewsPage from './pages/NewsPage';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/challenge" element={<ChallengePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/progress" element={<MyProgressPage />} />
+        <Route path="/news" element={<NewsPage />} />
       </Routes>
     </Layout>
   );
