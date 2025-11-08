@@ -1,0 +1,28 @@
+steps:
+  # Install dependencies in a forgiving mode to avoid npm ci lockfile issues
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install', '--legacy-peer-deps', '--no-audit', '--no-fund']
+
+  # Build the React app
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+
+  # Deploy to Firebase Hosting if FIREBASE_TOKEN is set in the build environment
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        set -euo pipefail
+        if [ -n "${FIREBASE_TOKEN:-}" ]; then
+          echo "FIREBASE_TOKEN found — deploying to Firebase Hosting"
+          npm install -g firebase-tools
+          firebase deploy --only hosting --token "$FIREBASE_TOKEN"
+        else
+          echo "FIREBASE_TOKEN not set — skipping firebase deploy"
+        fi
+
+timeout: '1200s'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
